@@ -2,16 +2,9 @@
 // npm install --save-dev prisma dotenv
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
+import {DATABASE_URI} from "./src/config/env.js";
 
-type Env = {
-  DATABASE_URI: string;
-};
-
-const env: Env = {
-  DATABASE_URI: process.env.DATABASE_URI as string,
-};
-
-if (!env.DATABASE_URI) {
+if (!DATABASE_URI) {
   console.error("DATABASE_URI is not defined in the environment variables.");
   process.exit(1);
 }
@@ -21,6 +14,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: env.DATABASE_URI,
+    url: DATABASE_URI,
   },
 });
