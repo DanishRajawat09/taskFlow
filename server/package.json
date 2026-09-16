@@ -12,8 +12,10 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "prisma": "^7.10.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.23.13",

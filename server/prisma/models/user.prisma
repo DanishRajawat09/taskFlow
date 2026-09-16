@@ -1,0 +1,14 @@
+enum Role {
+  OWNER
+  MANAGER
+  EMPLOYEE
+}
+model User {
+    id   String @id @default(uuid())
+    email String @unique 
+    password String
+    fullName String
+    role Role @default(EMPLOYEE)
+    createdAt DateTime @default(now())  
+    updatedAt DateTime @updatedAt
+}

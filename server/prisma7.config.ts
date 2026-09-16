@@ -9,7 +9,7 @@ if (!DATABASE_URI) {
   process.exit(1);
 }
 export default defineConfig({
-  schema: "prisma/schema.prisma",
+  schema: "prisma",
   migrations: {
     path: "prisma/migrations",
   },
