@@ -1,13 +1,13 @@
-class ApiResponse<T> {
+class ApiResponse<T = null> {
   public readonly statusCode: number;
   public readonly message: string;
-  public readonly data: T;
+  public readonly data: T | null;
   public readonly success: boolean;
   public readonly meta?: Record<string, unknown>;
 
   constructor(
     statusCode: number,
-    data: T,
+    data: T | null,
     message = "success",
     meta?: Record<string, unknown>
   ) {
@@ -18,12 +18,17 @@ class ApiResponse<T> {
     this.meta = meta;
   }
 
-  static success<T>(
-    statusCode: number,
-    data: T,
+ static success<T>({
+    statusCode,
+    data,
     message = "success",
-    meta?: Record<string, unknown>
-  ) {
+    meta,
+  }: {
+    statusCode: number;
+    data: T;
+    message?: string;
+    meta?: Record<string, unknown>;
+  }) {
     return new ApiResponse(
       statusCode,
       data,
