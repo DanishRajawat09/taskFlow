@@ -1,3 +1,4 @@
+import asyncHandler from "../../common/middlewares/asyncHandler.js";
 import { generateAccessToken, generateRefreshToken } from "../../common/middlewares/generateTokens.js";
 import ApiError from "../../common/utils/apiError.js";
 import cookieOption from "../../common/utils/cookiesOptions.js";
@@ -22,6 +23,12 @@ export const signUpService = async ({ email, password, fullName }: { email: stri
             password: hashedPassword,
             fullName,
         },
+        select: {
+            id: true,
+            email: true,
+            fullName: true,
+            role: true,
+        },
     });
 
 
@@ -43,3 +50,34 @@ export const signUpService = async ({ email, password, fullName }: { email: stri
 };
 
 
+
+
+export const logInService = async ({ email, password }: { email: string; password: string }): Promise<{ id: string; email: string; fullName: string; accessToken: string; refreshToken: string;  }> => {
+ 
+const userData = await prisma.user.findUnique({ where: { email }, select: { id: true, email: true, fullName: true, password: true, role: true } });
+if (!userData) {
+    throw new ApiError({ statusCode: 401, message: "Invalid email or password" });
+}
+
+const isPasswordMatch = await bcrypt.compare(password, userData.password);
+if (!isPasswordMatch) {
+    throw new ApiError({ statusCode: 401, message: "Invalid email or password" });
+}
+
+const accessToken = generateAccessToken({
+    userId: userData.id,
+    email: userData.email,
+    fullName: userData.fullName,
+    role: userData.role,
+});
+
+const refreshToken = generateRefreshToken({
+    userId: userData.id,
+    email: userData.email,
+    fullName: userData.fullName,
+    role: userData.role,
+});
+
+const { password: _, ...safeUser } = userData;
+return { ...safeUser, accessToken, refreshToken,  };
+}
