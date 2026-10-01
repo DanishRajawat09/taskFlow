@@ -9,6 +9,7 @@ model User {
     password String
     fullName String
     role Role @default(EMPLOYEE)
+    refreshToken String? @default("")
     createdAt DateTime @default(now())  
     updatedAt DateTime @updatedAt
 }
